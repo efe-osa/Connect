@@ -1,0 +1,83 @@
+{
+  "rules": {
+    
+    "channels": {
+      ".read": "auth!= null",
+        "$channelId": {
+          ".write": "auth!= null",
+          ".validate":"newData.hasChildren(['id', 'name', 'createdBy', 'details'])",
+          "id": {
+            ".validate": "newData.val() === $channelId"
+            },
+          "name": {
+            ".validate": "newData.val().length >0"
+          },
+          "details": {
+            ".validate": "newData.val()>0"
+          }
+        }  
+    },
+      "messages": {
+        "$channelId": {
+        ".write": "auth!= null",
+        ".validate":"root.child('channels/'+$channelId).exists()",
+        "$messageId": {
+          ".write": "auth!= null",
+          ".validate":"(newData.hasChildren(['content', 'user', 'timeStamp']) && !newData.hasChildren(['image'])) || (newData.hasChildren(['content', 'user', 'timeStamp']) && !newData.hasChildren(['content']))",
+            "content": {
+              ".validate": "newData.val().length >0"
+            },
+            "image": {
+              ".validate": "newData.val().length >0"
+            },
+            "name": {
+              ".validate":"newData.hasChildren(['id', 'name', 'avatar'])"
+            }        
+        }
+      }
+    },
+      "privateMessages": {
+        "$uid1": {
+          "$uid2":{
+            ".read": "auth!= null && auth.uid == $uid1 || auth.uid2 == $uid2",
+             "$messageId": {
+                ".write": "auth!= null",
+                ".validate":"(newData.hasChildren(['content', 'user', 'timeStamp']) && !newData.hasChildren(['image'])) || (newData.hasChildren(['content', 'user', 'timeStamp'])|| !newData.hasChildren(['content']))",
+                "content": {
+                  ".validate": "newData.val().length >0"
+                },
+                "image": {
+                ".validate": "newData.val().length >0"
+                },
+                "name": {
+                  ".validate":"newData.hasChildren(['id', 'name', 'avatar'])"
+                }        
+              }
+          }
+      }
+    },
+    "presence": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "typing": {
+     ".read": "auth != null",
+     ".write": "auth != null"
+    },
+    "users": {
+     ".read": "auth != null",
+      "$uid": {
+         ".read": "auth != null && auth.uid === $uid",
+         ".validate": "newData.hasChildren(['name', 'avatar'])",
+         "name": {
+            ".validate": "newData.val().length >0"
+          },
+         "avatar": {
+            ".validate": "newData.val().length >0"
+         },
+        }
+    },     
+    ".read": true,
+    ".write": true
+  }
+}
