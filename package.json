@@ -19,7 +19,7 @@
     "redux-devtools-extension": "^2.13.5",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.1",
-    "uuid": "^3.3.2"
+    "uuid": "^14.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
